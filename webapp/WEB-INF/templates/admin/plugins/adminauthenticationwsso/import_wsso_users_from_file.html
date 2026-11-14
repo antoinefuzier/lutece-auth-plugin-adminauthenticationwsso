@@ -2,6 +2,7 @@
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<div class="box box-success">
 			<div class="box-body">
+				<h1>#i18n{portal.users.import_users_from_file.labelImportUsers}</h1>
 				<form class="form-horizontal" enctype="multipart/form-data" method="post" name="import_users_from_file" action="jsp/admin/user/DoImportUsersFromFile.jsp">
 					<input type="hidden" name="token" value="${token!''}"/>
                                         <ul class="nav nav-tabs">
@@ -9,58 +10,60 @@
 							<a href="jsp/admin/user/ExportUsers.jsp">#i18n{portal.users.export_users.labelExportUsers}</a>
 						</li>
 						<li class="active">
-							<a href="jsp/admin/user/ImportUsersFromFile.jsp" >#i18n{portal.users.import_users_from_file.labelImportUsers}</a>
+							<a href="jsp/admin/user/ImportUsersFromFile.jsp" aria-current="page">#i18n{portal.users.import_users_from_file.labelImportUsers}</a>
 						</li>
 					</ul>
 					<div class="form-group">
-						<label class="col-xs-12 col-sm-12 col-md-2 col-lg-3" for="import_file">#i18n{portal.users.import_users_from_file.labelImportFile} * :</label>
+						<label class="col-xs-12 col-sm-12 col-md-2 col-lg-3" for="import_file">#i18n{portal.users.import_users_from_file.labelImportFile} <span aria-hidden="true">*</span> :</label>
 						<div class="col-xs-12 col-sm-12 col-md-10 col-lg-9">
-							<input type="file" id="import_file" name="import_file"/>
-							<span class="help-block">#i18n{portal.users.import_users_from_file.labelCSVSeparator} "<strong>${csv_separator}</strong>".<br />
+							<input type="file" id="import_file" name="import_file" required aria-describedby="import_file_help import_file_encoding"/>
+							<span class="help-block" id="import_file_help">#i18n{portal.users.import_users_from_file.labelCSVSeparator} "<strong>${csv_separator}</strong>".<br />
 							#i18n{adminauthenticationwsso.import_users_from_file.labelListColumns}<br />
 							#i18n{portal.users.import_users_from_file.labelComplementaryAttributes} "<strong>${attributes_separator}</strong>".<br />
 							#i18n{portal.users.import_users_from_file.labelRightsRolesWorkgroup}</span>
-							<span class="help-block">#i18n{portal.users.import_users_from_file.labelFileEncoding}</span>
+							<span class="help-block" id="import_file_encoding">#i18n{portal.users.import_users_from_file.labelFileEncoding}</span>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-xs-12 col-sm-12 col-md-2 col-lg-3" for="ignore_first_line"></label>
+						<span class="col-xs-12 col-sm-12 col-md-2 col-lg-3"></span>
 						<div class="col-xs-12 col-sm-12 col-md-10 col-lg-9">
 							<div class="checkbox">
 								<label>
-									<input type="checkbox" id="ignore_first_line" name="ignore_first_line">
+									<input type="checkbox" id="ignore_first_line" name="ignore_first_line" aria-describedby="ignore_first_line_help">
 									#i18n{portal.users.import_users_from_file.labelIgnoreFirstLine}
 								</label>
 							</div>
-							<p class="help-block">#i18n{portal.users.import_users_from_file.labelHelpIgnoreFirstLine}</p>
+							<p class="help-block" id="ignore_first_line_help">#i18n{portal.users.import_users_from_file.labelHelpIgnoreFirstLine}</p>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-xs-12 col-sm-12 col-md-2 col-lg-3" for="update_existing_users"></label>
+						<span class="col-xs-12 col-sm-12 col-md-2 col-lg-3"></span>
 						<div class="col-xs-12 col-sm-12 col-md-10 col-lg-9">
 							<div class="checkbox">
 								<label>
-									<input type="checkbox" id="update_existing_users" name="update_existing_users">
+									<input type="checkbox" id="update_existing_users" name="update_existing_users" aria-describedby="update_existing_users_help">
 									#i18n{portal.users.import_users_from_file.labelUpdateExistingUsers}
 								</label>
 							</div>	
-							<p class="help-block">#i18n{portal.users.import_users_from_file.labelHelpUpdateExistingUsers}</p>
+							<p class="help-block" id="update_existing_users_help">#i18n{portal.users.import_users_from_file.labelHelpUpdateExistingUsers}</p>
 						</div>
 					</div>
 					<#if csv_messages?? && csv_messages?has_content>
+						<div role="alert">
 						<#list csv_messages as csv_message>
 							<div <#if csv_message.messageLevel?string == "ERROR">class="alert-danger"</#if>>
-								<#if 0 < csv_message.lineNumber >#i18n{portal.users.import_users_from_file.lineNumber} ${csv_message.lineNumber} - </#if>${csv_message.messageContent}
+								<#if csv_message.messageLevel?string == "ERROR"><strong>#i18n{adminauthenticationwsso.import_users_from_file.labelError}</strong> </#if><#if 0 < csv_message.lineNumber >#i18n{portal.users.import_users_from_file.lineNumber} ${csv_message.lineNumber} - </#if>${csv_message.messageContent}
 							</div>
 						</#list>
+						</div>
 					</#if>
 					<div class="form-group">
 						<div class="col-xs-12 col-sm-12 col-md-offset-2 col-lg-offset-3">
 							<button class="btn btn-primary btn-flat" type="submit">
-								<i class="glyphicon glyphicon-ok"></i> #i18n{portal.util.labelValidate}
+								<i class="glyphicon glyphicon-ok" aria-hidden="true"></i> #i18n{portal.util.labelValidate}
 							</button>
 							<a class="btn btn-default btn-flat" href="jsp/admin/user/ManageUsers.jsp">
-								<i class="glyphicon glyphicon-remove-circle"></i> #i18n{portal.util.labelBack}
+								<i class="glyphicon glyphicon-remove-circle" aria-hidden="true"></i> #i18n{portal.util.labelBack}
 							</a>
 						</div>
 					</div>

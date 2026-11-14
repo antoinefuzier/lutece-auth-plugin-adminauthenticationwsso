@@ -94,4 +94,33 @@ public class ImportWssoUsersTemplateRenderTest
         assertTrue( strHtml.contains( " 2 - " ), strHtml );
         assertFalse( strHtml.contains( "<b>" ), strHtml );
     }
+
+    /**
+     * The import messages are announced, and an error is told by a word, not by its colour only.
+     *
+     * @throws IOException
+     *             if the template cannot be read
+     * @throws TemplateException
+     *             if the template cannot be rendered
+     */
+    @Test
+    public void testImportMessagesAreAnnounced( ) throws IOException, TemplateException
+    {
+        Configuration cfg = new Configuration( Configuration.VERSION_2_3_32 );
+        cfg.setOutputFormat( HTMLOutputFormat.INSTANCE );
+        cfg.setAutoEscapingPolicy( Configuration.ENABLE_IF_DEFAULT_AUTO_ESCAPING_POLICY );
+
+        Map<String, Object> model = new HashMap<>( );
+        model.put( "csv_separator", ";" );
+        model.put( "attributes_separator", ":" );
+        model.put( "csv_messages", List.of( new CSVMessageDescriptor( CSVMessageLevel.ERROR, 2, "Not found" ) ) );
+
+        StringWriter writer = new StringWriter( );
+        new Template( TEMPLATE, Files.readString( Path.of( TEMPLATE ), StandardCharsets.UTF_8 ), cfg ).process( model, writer );
+        String strHtml = writer.toString( );
+
+        assertTrue( strHtml.contains( "<div role=\"alert\">" ), strHtml );
+        assertTrue( strHtml.contains( "<strong>#i18n{adminauthenticationwsso.import_users_from_file.labelError}</strong>" ), strHtml );
+        assertTrue( strHtml.contains( "aria-describedby=\"import_file_help import_file_encoding\"" ), strHtml );
+    }
 }
